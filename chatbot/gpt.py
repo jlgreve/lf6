@@ -1,11 +1,11 @@
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="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"
+    api_key="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"
 )
 
 
-def getGptResponse(message: str):
+def get_gpt_response(message: str):
     response = client.chat.completions.create(
         model="ft:gpt-3.5-turbo-1106:personal::8UZe4KeA",
         messages=[{
@@ -20,6 +20,3 @@ def getGptResponse(message: str):
     )
 
     return response.choices[0].message.content
-
-
-print("Response: " + getGptResponse("Where do I find the IT help desk?!"))
