@@ -5,6 +5,9 @@ from gpt import get_gpt_response
 
 app = Flask(__name__)
 
+# Set up logging to the console
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s', handlers=[logging.StreamHandler()])
+
 
 @app.route('/prompt/<message>')
 def process_prompt(message):
@@ -23,7 +26,7 @@ def chat():
         bot_response = get_gpt_response(user_input)
     except Exception as e:
         # Log error
-        print(f"Error processing user input: {e}")
+        logging.error(f"Error processing user input: {e}")
         # Set bot_response to a default error message
         bot_response = f"Sorry, an error occurred. Please try again later."
     return render_template('index.html', user_input=user_input, bot_response=bot_response)
