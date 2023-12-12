@@ -13,10 +13,11 @@ logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %
 def process_prompt(message):
     return get_gpt_response(message)
 
+chat_history = []
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', chat_history=chat_history)
 
 
 @app.route('/chat', methods=['POST'])
@@ -29,7 +30,9 @@ def chat():
         logging.error(f"Error processing user input: {e}")
         # Set bot_response to a default error message
         bot_response = f"Sorry, an error occurred. Please try again later."
-    return render_template('index.html', user_input=user_input, bot_response=bot_response)
+
+    chat_history.append({'user': user_input, 'bot': bot_response})
+    return render_template('index.html', chat_history=chat_history)
 
 
 if __name__ == '__main__':

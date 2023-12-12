@@ -9,17 +9,14 @@
     <div>
         <h1>Chatbot</h1>
         <div id="chat-container">
-            {% if user_input %}
+            {% for message in chat_history %}
                 <div class="user-message">
-                    <strong>You:</strong> {{ user_input }}
+                    <strong>You:</strong> {{ message.user }}
                 </div>
-            {% endif %}
-
-            {% if bot_response %}
                 <div class="bot-message">
-                    <strong>Bot:</strong> {{ bot_response }}
+                    <strong>Bot:</strong> {{ message.bot }}
                 </div>
-            {% endif %}
+            {% endfor %}
         </div>
 
         <form method="post" action="/chat">
