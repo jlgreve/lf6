@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+</head>
+<body>
+    <div>
+        <h1>Chatbot</h1>
+        <div id="chat-container">
+            {% if user_input %}
+                <div class="user-message">
+                    <strong>You:</strong> {{ user_input }}
+                </div>
+            {% endif %}
+
+            {% if bot_response %}
+                <div class="bot-message">
+                    <strong>Bot:</strong> {{ bot_response }}
+                </div>
+            {% endif %}
+        </div>
+
+        <form method="post" action="/chat">
+            <input type="text" name="user_input" placeholder="Type your message...">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>
