@@ -1,0 +1,185 @@
+,statement,support_level
+0,My computer is displaying a blue screen error.,1
+1,I'm unable to access a specific application.,1
+2,The internet connection is intermittent.,1
+3,I accidentally clicked on a suspicious link. What should I do?,1
+4,I need assistance with software installation on my machine.,1
+5,There is a strange noise coming from my computer tower.,1
+6,I received a security alert on my computer.,1
+7,My computer is taking a long time to boot up.,1
+8,I can't connect to the VPN.,1
+9,I'm experiencing frequent system crashes.,1
+10,I need access to a shared folder on the network.,1
+11,My computer is not recognizing an external device.,1
+12,I'm having issues with the performance of a specific software application.,1
+13,I accidentally deleted an important folder. Can it be recovered?,1
+14,I'm getting a disk space full warning.,1
+15,The printer is not responding.,1
+16,I need help configuring email on my mobile device.,1
+17,My computer is not updating to the latest software version.,1
+18,I suspect my computer has malware.,1
+19,I'm having trouble with a software license activation.,1
+20,"The computer is overheating, and the fan is noisy.",1
+21,I can't access a shared printer on the network.,1
+22,There's a problem with my email synchronization.,1
+23,I need assistance with a complex Excel formula.,1
+24,The software is displaying an 'access denied' message.,1
+25,My computer is not recognizing the second monitor.,1
+26,I accidentally closed an important document without saving. Can it be recovered?,1
+27,The mouse or keyboard is not working after a recent update.,1
+28,I need help setting up a new user account on the network.,1
+29,I'm experiencing issues with a software plugin.,1
+30,The computer is not connecting to a specific Wi-Fi network.,1
+31,I'm having trouble with a database query.,1
+32,There's a problem with the graphics display on my computer.,1
+33,I need assistance with a remote desktop connection.,1
+34,My computer is experiencing random reboots.,1
+35,I'm unable to print in color.,1
+36,The software is giving me a licensing error.,1
+37,I accidentally changed a critical system setting. How can I revert it?,1
+38,My computer is not recognizing a newly installed hardware device.,1
+39,I need help recovering a deleted email.,1
+40,The browser is displaying certificate errors.,1
+41,There's an issue with the company's intranet site.,1
+42,I'm having trouble with a custom script in my workflow.,1
+43,The computer is not connecting to a specific server on the network.,1
+44,I need assistance with data migration.,1
+45,I'm experiencing issues with a virtual machine.,1
+46,The computer is not recognizing a newly installed software.,1
+47,I need to restore a previous version of a file.,1
+48,The software is not working after a recent update.,1
+49,I'm having trouble with a specific software feature.,1
+50,The computer is not recognizing a USB device.,1
+51,I need assistance with data backup and recovery.,1
+52,I'm getting a 'low disk space' warning on the server.,1
+53,There's a problem with a scheduled task on my computer.,1
+54,I'm having trouble accessing a secure website.,1
+55,The computer is running slow after opening a large file.,1
+56,I need help configuring a new email distribution list.,1
+57,The laptop is not charging.,1
+58,I'm experiencing issues with a software API integration.,1
+59,The software is not responding to user inputs.,1
+60,I need assistance with setting up a secure Wi-Fi connection.,1
+61,The computer is not recognizing a specific peripheral device.,1
+62,I'm having trouble with a software crash dump analysis.,1
+63,There's an issue with the synchronization of files across devices.,1
+64,I need help troubleshooting a connectivity issue with a network printer.,1
+65,The computer is not recognizing a newly installed software update.,1
+66,I'm experiencing issues with a custom software script.,1
+67,There's a problem with a third-party software integration.,1
+68,I accidentally changed a system configuration file. How can I fix it?,1
+69,I'm having trouble with a software bug affecting my workflow.,1
+70,The computer is not connecting to an external database.,1
+71,I need assistance with configuring email encryption.,1
+72,I'm experiencing issues with a specific web application.,1
+73,The computer is not recognizing a newly installed peripheral device.,1
+74,I need help with troubleshooting a network connectivity issue.,1
+75,There's an issue with a specific browser extension.,1
+76,I'm having trouble with a software compatibility error.,1
+77,The computer is not recognizing a new software license.,1
+78,I need assistance with a complex software configuration.,1
+79,I'm experiencing issues with a specific software function.,1
+80,The computer is not recognizing a newly installed hardware driver.,1
+81,I'm having trouble with a software performance bottleneck.,1
+82,There's an issue with a custom database query.,1
+83,I accidentally closed a critical software process. How can I restart it?,1
+84,I need help with configuring software for automatic updates.,1
+85,The computer is not recognizing a specific software patch.,1
+86,I'm experiencing issues with a software memory leak.,1
+87,There's an issue with the synchronization of calendar events.,1
+88,I accidentally changed a network configuration setting. How can I undo it?,1
+89,I'm having trouble with a software localization error.,1
+90,The computer is not recognizing a new software feature.,1
+91,I need assistance with configuring a software firewall.,1
+92,I'm experiencing issues with a software script execution.,1
+93,There's an issue with a specific software plugin integration.,1
+94,I accidentally deleted a critical system file. How can I restore it?,1
+95,I need help with troubleshooting a server performance issue.,1
+96,I'm having trouble with a software script deployment.,1
+97,The computer is not recognizing a newly installed software tool.,1
+98,I need assistance with a complex software upgrade.,1
+99,I'm experiencing issues with a specific software API endpoint.,1
+0,I forgot my password.,0
+1,How do I reset my password?,0
+2,My computer is running slow.,0
+3,I can't find my files.,0
+4,How do I connect to the Wi-Fi?,0
+5,My email isn't working.,0
+6,I'm having trouble printing.,0
+7,The computer won't turn on.,0
+8,I need help installing software.,0
+9,What is my username?,0
+10,I accidentally deleted a file. Can it be recovered?,0
+11,My computer is making a strange noise.,0
+12,How do I set up my out-of-office email reply?,0
+13,My monitor/display is not working.,0
+14,I can't access a website.,0
+15,How do I update my software?,0
+16,My mouse or keyboard isn't working.,0
+17,What is the company's IT policy?,0
+18,I need assistance with email attachments.,0
+19,My computer froze. What should I do?,0
+20,How do I set up a meeting on Microsoft Teams?,0
+21,I need help connecting to a VPN.,0
+22,What is my email address?,0
+23,My computer is overheating.,0
+24,How do I empty the recycle bin?,0
+25,I need to change my password for security reasons.,0
+26,I accidentally closed all my browser tabs. Can I recover them?,0
+27,How do I update my email password on my mobile device?,0
+28,My keyboard shortcuts are not working.,0
+29,Can you recommend a good password manager?,0
+30,I'm having trouble with the audio on my computer.,0
+31,How do I set up a new email account?,0
+32,My computer is not recognizing my external hard drive.,0
+33,I'm getting a pop-up message on my screen. Is it a virus?,0
+34,How do I clear my browser cache?,0
+35,I need assistance with two-factor authentication.,0
+36,The fonts on my computer look weird.,0
+37,How do I create a strong password?,0
+38,My computer is not connecting to the printer.,0
+39,What is the process for requesting IT support?,0
+40,I can't log in to my computer.,0
+41,What is the default password?,0
+42,My internet is not working.,0
+43,How do I access the shared drive?,0
+44,I'm having trouble with my email signature.,0
+45,Can you help me set up my printer?,0
+46,What antivirus software should I use?,0
+47,My computer is showing an error message.,0
+48,My computer screen is flickering.,0
+49,What is the IT support phone number?,0
+50,I can't find the software I need on the network.,0
+51,The date and time on my computer are incorrect.,0
+52,I'm locked out of my account.,0
+53,My computer won't shut down.,0
+54,I can't find the application I need on my computer.,0
+55,How do I set up my email on my mobile device?,0
+56,My computer is not recognizing the USB drive.,0
+57,What is the process for ordering new equipment?,0
+58,I accidentally moved a file. How can I locate it?,0
+59,My computer is running out of storage space.,0
+60,How do I set up an email filter?,0
+61,I need help configuring my screensaver.,0
+62,The computer is not connecting to the projector for the presentation.,0
+63,How do I update my profile picture in the system?,0
+64,My mouse pointer is moving erratically.,0
+65,Can you recommend a good backup solution?,0
+66,I need assistance with setting up a new software tool.,0
+67,What are the guidelines for remote access to the company network?,0
+68,My computer is not recognizing my webcam.,0
+69,How can I access my work email from home?,0
+70,The icons on my desktop are rearranged. How can I fix that?,0
+71,How do I create a distribution list in Outlook?,0
+72,My computer is making a beeping noise. What does it mean?,0
+73,How do I set up an automatic out-of-office reply?,0
+74,I need help organizing my email folders.,0
+75,The printer is printing blank pages. What should I do?,0
+76,What is the process for updating my software licenses?,0
+77,I accidentally uninstalled a program. Can I reinstall it?,0
+78,How do I set up a virtual meeting using Zoom?,0
+79,My computer is not connecting to the external monitor.,0
+80,What are the password requirements for our network?,0
+81,How do I clear my browser history?,0
+82,I can't do it on my own,1
+83,I still couldn't fix it after multiple tries,1
