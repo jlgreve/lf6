@@ -1,7 +1,6 @@
 from openai import OpenAI
 
-client = OpenAI(
-)
+client = OpenAI()
 
 
 def get_gpt_response(message: str):
