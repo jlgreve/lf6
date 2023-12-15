@@ -1,28 +1,54 @@
-<!DOCTYPE html>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="../static/styles/chat_styles.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+          rel="stylesheet">
+    <title></title>
+
 </head>
 <body>
-    <div>
-        <h1>Chatbot</h1>
-        <div id="chat-container">
-            {% for message in chat_history %}
-                <div class="user-message">
-                    <strong>You:</strong> {{ message.user }}
+<div class="container">
+    <h3 class=" text-center">Chatbot 3000</h3>
+    <div class="messaging">
+        <div class="inbox_msg">
+            <div class="mesgs">
+                <div class="msg_history">
+                    {% for message in chat_history %}
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p> {{ message.user }}</p>
+                            <span class="time_date">{{ message.user_time }}</span></div>
+                    </div>
+                    <div class="incoming_msg">
+                        <div class="incoming_msg_img"><img src="../static/images/chatbot_icon.png"
+                                                           alt="chatti, the chatbot"></div>
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p> {{ message.bot }}</p>
+                                <span class="time_date">{{ message.bot_time }}</span></div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div class="bot-message">
-                    <strong>Bot:</strong> {{ message.bot }}
+                <div class="type_msg">
+                    <div class="input_msg_write">
+                        <form method="post" action="/chat">
+                            <input type="text" name="user_input" class="write_msg" placeholder="Type a message"/>
+                            <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o"
+                                                                          aria-hidden="true"></i></button>
+                        </form>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
         </div>
-
-        <form method="post" action="/chat">
-            <input type="text" name="user_input" placeholder="Type your message...">
-            <button type="submit">Send</button>
-        </form>
     </div>
+</div>
 </body>
 </html>
