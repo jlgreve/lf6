@@ -1,6 +1,5 @@
 import logging
 from flask import Flask, request, render_template
-from sklearn.feature_extraction.text import TfidfVectorizer
 from gpt import get_gpt_response
 import pickle
 
