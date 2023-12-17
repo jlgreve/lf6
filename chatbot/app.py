@@ -86,6 +86,7 @@ def first_level_handling():
     phone_number = request.form['phone_number']
     phone_number_check = valid_phone_number(phone_number)
     if phone_number_check == True:
+        # Todo: The First Level classified message must be stored in a database with phone number as reference
         return render_template('thank_you.html', phone_number=phone_number)
     else:
         return render_template('first_level.html', information=f"Pleaser re-enter your phone number."
