@@ -1,0 +1,6 @@
+logging:
+  level: "ERROR"
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+models:
+  classifier: "../model/model.pkl"
+  vectorizer: "../model/vectorizer.pkl"

@@ -1,38 +1,38 @@
 import logging
 
-from flask import Flask, request, render_template
 from gpt import get_gpt_response
+from util import yaml_from_file, pickle_from_file
 from datetime import datetime
-import pickle
+from flask import Flask, request, render_template, redirect
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
 
-app = Flask(__name__)
+# Global variables
+glob_config: dict[str, dict] = {}
+glob_chat_history: list[dict] = []
+glob_classifier: MultinomialNB = None
+glob_tfidf_vectorizer: TfidfVectorizer = None
 
-# Set up logging to the console
-logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[logging.StreamHandler()])
+app: Flask = Flask(__name__)
 
 
 @app.route('/prompt/<message>')
-def process_prompt(message):
+def endpoint_prompt(message) -> str:
     return get_gpt_response(message)
 
 
-chat_history = []
-
-
 @app.route('/')
-def home():
-    return render_template('index.html', chat_history=chat_history)
+def endpoint_home() -> str:
+    return render_template('index.html', chat_history=glob_chat_history)
 
 
-# for each message in chat_history:
-# Immer ein pair aus user input & bot respone
-
+# For each message in chat_history:
+# Always a pair of user input & bot response
 @app.route('/chat', methods=['POST'])
-def chat():
+def endpoint_chat():
     user_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
 
-    user_input = request.form['user_input']
+    user_input: str = request.form['user_input']
 
     # Classify support level
     support_level = classify_level(user_input)
@@ -44,7 +44,7 @@ def chat():
             # Log error
             logging.error(f"Error processing user input: {e}")
             # Set bot_response to a default error message
-            bot_response = f"Sorry, an error occurred. Please try again later."
+            bot_response = "Sorry, an error occurred. Please try again later."
     else:
         bot_response = ("I apologize for any inconvenience you're experiencing. It seems that your issue requires the"
                         " attention of our first-level support team. Please provide us with your contact number,"
@@ -52,19 +52,33 @@ def chat():
                         "Thank you for your understanding.")
 
     bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
-    chat_history.append({'user': user_input, 'bot': bot_response, 'user_time': user_msg_time, 'bot_time': bot_msg_time})
-    return render_template('index.html', chat_history=chat_history)
+    glob_chat_history.append(
+        {'user': user_input, 'bot': bot_response, 'user_time': user_msg_time, 'bot_time': bot_msg_time}
+    )
+
+    return redirect('/')
 
 
-def classify_level(input):
-    with open('../model/model.pkl', 'rb') as file:
-        classifier = pickle.load(file)
-    with open('../model/vectorizer.pkl', 'rb') as file:
-        tfidf_vectorizer = pickle.load(file)
+def classify_level(enquiry: str):
+    new_statements_tfidf = glob_tfidf_vectorizer.transform([enquiry])
 
-    new_statements_tfidf = tfidf_vectorizer.transform([input])
-    return classifier.predict(new_statements_tfidf)[0]
+    return glob_classifier.predict(new_statements_tfidf)[0]
 
 
 if __name__ == '__main__':
+    # Load config
+    glob_config = yaml_from_file('config.yaml')
+
+    # Set up logging to the console
+    logging.basicConfig(
+        level=glob_config['logging']['level'],
+        format=glob_config['logging']['format'],
+        handlers=[logging.StreamHandler()]
+    )
+
+    # Load support level classifier model
+    glob_classifier = pickle_from_file(glob_config['models']['classifier'])
+    glob_tfidf_vectorizer = pickle_from_file(glob_config['models']['vectorizer'])
+
+    # Start WebApp
     app.run()

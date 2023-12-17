@@ -3,7 +3,7 @@ from openai import OpenAI
 client = OpenAI()
 
 
-def get_gpt_response(message: str):
+def get_gpt_response(message: str) -> str:
     response = client.chat.completions.create(
         model="ft:gpt-3.5-turbo-1106:personal::8VyXp8D8",
         messages=[{
