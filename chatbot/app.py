@@ -77,8 +77,23 @@ if __name__ == '__main__':
     )
 
     # Load support level classifier model
-    glob_classifier = pickle_from_file(glob_config['models']['classifier'])
-    glob_tfidf_vectorizer = pickle_from_file(glob_config['models']['vectorizer'])
+    try:
+        glob_classifier = pickle_from_file(glob_config['models']['classifier'])
+        glob_tfidf_vectorizer = pickle_from_file(glob_config['models']['vectorizer'])
+    except FileNotFoundError:
+        print(
+            'Fatal Error!\n'
+            'The classification model has not been generated.\n'
+            'To generate the model, navigate the terminal to "lf6/model/" and run: python main.py'
+        )
+        exit(1)
+    except Exception as ex:
+        print(
+            'Fatal Error!\n'
+            'An unexpected exception has occurred while loading the classification model.\n'
+            f'Exception: {ex}'
+        )
+        exit(1)
 
     # Start WebApp
     app.run()
