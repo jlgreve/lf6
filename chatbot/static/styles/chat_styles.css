@@ -150,6 +150,18 @@ img {
     width: 100%;
 }
 
+header {
+    padding: 10px;
+    text-align: center;
+}
+
+/* Add your additional styles as needed */
+/* For example, you might want to remove the default underlining of links */
+header a {
+    text-decoration: none;
+    color: inherit; /* Inherit text color from the parent element */
+}
+
 .mesgs {
     float: left;
     padding: 30px 15px 0 25px;
