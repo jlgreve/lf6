@@ -32,8 +32,7 @@ def endpoint_home() -> str:
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
-    feedback = request.form
-    print(feedback)
+    feedback = request.form["feedback"]
     thank_you_message = "Thank you! Your feedback has been submitted."
     bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
     return render_template('index.html', chat_history=glob_chat_history,
