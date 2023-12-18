@@ -32,11 +32,11 @@ def endpoint_home() -> str:
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
-    feedback = request.form["feedback"]
+    feedback = int(request.form["feedback"])
     thank_you_message = "Thank you! Your feedback has been submitted."
     bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
     return render_template('index.html', chat_history=glob_chat_history,
-                           type="feedback_submitted", bot_msg_time=bot_msg_time, thank_you_message=thank_you_message)
+                           support_level=3, bot_msg_time=bot_msg_time, thank_you_message=thank_you_message)
 
 
 # For each message in chat_history:
@@ -44,6 +44,7 @@ def submit_feedback():
 @app.route('/chat', methods=['POST'])
 def endpoint_chat():
     global ticket_number
+    feedback_message = ""
     user_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
 
     user_input: str = request.form['user_input']
@@ -59,7 +60,7 @@ def endpoint_chat():
             logging.error(f"Error processing user input: {e}")
             # Set bot_response to a default error message
             bot_response = "Sorry, an error occurred. Please try again later."
-    if support_level == 2:
+    elif support_level == 2:
         bot_response = ("I am glad i was able to help you. Please feel free to tell us how you felt about my support "
                         "so we are able to improve our services!")
     else:
@@ -68,13 +69,16 @@ def endpoint_chat():
                         f"with your problem. To speed things up, please note down your ticket number: #"
                         f"<b>{ticket_number:06d}</b> so we have an easier time to find your request. We look "
                         f" forward to be hearing from you!")
+        feedback_message = (
+            "I am sorry for not being able to help you. Please feel free to tell us how you felt about my support "
+            "so we are able to improve our services!")
         ticket_number += 1
     bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
     glob_chat_history.append(
         {'user': user_input, 'bot': bot_response, 'user_time': user_msg_time, 'bot_time': bot_msg_time}
     )
     return render_template('index.html', chat_history=glob_chat_history,
-                           type="feedback") if support_level == 2 else redirect('/')
+                           support_level=support_level, bot_msg_time=bot_msg_time, feedback_message=feedback_message)
 
 
 def classify_level(enquiry: str):

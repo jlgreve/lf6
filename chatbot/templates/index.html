@@ -42,18 +42,36 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% if type == "feedback" %}
+                    {% if support_level == 1 %}
+                    <div class="incoming_msg">
+                        <div class="incoming_msg_img"><img src="../static/images/chatty_the_chatbot.png"
+                                                           alt="chatty, the chatbot"></div>
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p> {{ feedback_message }}</p>
+                                <span class="time_date">{{ bot_msg_time }}</span></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if support_level == 2 or support_level == 1 %}
                 </div>
-                <div class="feedback_buttons">
+                <div style="margin: auto;width: 50%; padding: 10px;">
                     <form method="post" action="/submit_feedback">
-                        <input type="submit" name="feedback" value="1">
-                        <input type="submit" name="feedback" value="2">
-                        <input type="submit" name="feedback" value="3">
-                        <input type="submit" name="feedback" value="4">
-                        <input type="submit" name="feedback" value="5">
+                        <input type="submit" name="feedback" value="1"
+                               style="background-color: #ff0000; height:65px; width:100px">
+                        <input type="submit" name="feedback" value="2"
+                               style="background-color: #ffc100; height:65px; width:100px">
+                        <input type="submit" name="feedback" value="3"
+                               style="background-color: #ffff00; height:65px; width:100px">
+                        <input type="submit" name="feedback" value="4"
+                               style="background-color: #d6ff00; height:65px; width:100px">
+                        <input type="submit" name="feedback" value="5"
+                               style="background-color: #63ff00; height:65px; width:100px">
                     </form>
                 </div>
-                {% elif type == "feedback_submitted" %}
+                {% elif support_level == 3 %}
+                {% if 3==3%}
+                {% endif %}
                 <div class="incoming_msg">
                     <div class="incoming_msg_img"><img src="../static/images/chatty_the_chatbot.png"
                                                        alt="chatty, the chatbot"></div>
