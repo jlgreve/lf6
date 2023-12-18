@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from gpt import get_gpt_response
 from util import yaml_from_file, pickle_from_file
@@ -12,10 +13,13 @@ glob_config: dict[str, dict] = {}
 glob_chat_history: list[dict] = []
 glob_classifier: MultinomialNB = None
 glob_tfidf_vectorizer: TfidfVectorizer = None
+phone_number = "+49 1910 1217"
+ticket_number = 100
 
 app: Flask = Flask(__name__)
 
 
+# TODO imlement max size of message
 @app.route('/prompt/<message>')
 def endpoint_prompt(message) -> str:
     return get_gpt_response(message)
@@ -26,10 +30,21 @@ def endpoint_home() -> str:
     return render_template('index.html', chat_history=glob_chat_history)
 
 
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    feedback = request.form
+    print(feedback)
+    thank_you_message = "Thank you! Your feedback has been submitted."
+    bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
+    return render_template('index.html', chat_history=glob_chat_history,
+                           type="feedback_submitted", bot_msg_time=bot_msg_time, thank_you_message=thank_you_message)
+
+
 # For each message in chat_history:
 # Always a pair of user input & bot response
 @app.route('/chat', methods=['POST'])
 def endpoint_chat():
+    global ticket_number
     user_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
 
     user_input: str = request.form['user_input']
@@ -45,52 +60,28 @@ def endpoint_chat():
             logging.error(f"Error processing user input: {e}")
             # Set bot_response to a default error message
             bot_response = "Sorry, an error occurred. Please try again later."
+    if support_level == 2:
+        bot_response = ("I am glad i was able to help you. Please feel free to tell us how you felt about my support "
+                        "so we are able to improve our services!")
     else:
-        bot_response = ("I apologize for any inconvenience you're experiencing. It seems that your issue requires the"
-                        " attention of our first-level support team. Please provide us with your contact number,"
-                        " attention of our first-level support team. Please provide us with your work phone number,"
-                        "and a support representative will get in touch with you shortly to assist you further. "
-                        "Thank you for your understanding.")
-        return render_template('first_level.html', information=bot_response)
-
+        bot_response = (f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
+                        f"free to contact us under <b>{phone_number}</b> and one of our employees will support you "
+                        f"with your problem. To speed things up, please note down your ticket number: #"
+                        f"<b>{ticket_number:06d}</b> so we have an easier time to find your request. We look "
+                        f" forward to be hearing from you!")
+        ticket_number += 1
     bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
     glob_chat_history.append(
         {'user': user_input, 'bot': bot_response, 'user_time': user_msg_time, 'bot_time': bot_msg_time}
     )
-
-    return redirect('/')
+    return render_template('index.html', chat_history=glob_chat_history,
+                           type="feedback") if support_level == 2 else redirect('/')
 
 
 def classify_level(enquiry: str):
     new_statements_tfidf = glob_tfidf_vectorizer.transform([enquiry])
 
     return glob_classifier.predict(new_statements_tfidf)[0]
-
-
-def valid_phone_number(phone_number):
-    # Remove spaces from the input string
-    phone_number = phone_number.replace(" ", "").replace("-", "")
-    if "+49" in phone_number:
-        phone_number.replace("+49", "0")
-    if len(phone_number) != 11:
-        return "Work phone number format: 040 XXXX XXXX"
-    if not phone_number.startswith("040"):
-        return "Work phone number must start with Hamburgs area code."
-    if not phone_number.isnumeric():
-        return "Entered work phone number contained illegal letters"
-    return True
-
-
-@app.route('/process_phone_number', methods=['POST'])
-def first_level_handling():
-    phone_number = request.form['phone_number']
-    phone_number_check = valid_phone_number(phone_number)
-    if phone_number_check == True:
-        # Todo: The First Level classified message must be stored in a database with phone number as reference
-        return render_template('thank_you.html', phone_number=phone_number)
-    else:
-        return render_template('first_level.html', information=f"Pleaser re-enter your phone number."
-                                                               f" {phone_number_check}")
 
 
 if __name__ == '__main__':

@@ -37,24 +37,48 @@
                                                            alt="chatty, the chatbot"></div>
                         <div class="received_msg">
                             <div class="received_withd_msg">
-                                <p> {{ message.bot }}</p>
+                                <p> {{ message.bot | safe }}</p>
                                 <span class="time_date">{{ message.bot_time }}</span></div>
                         </div>
                     </div>
                     {% endfor %}
+                    {% if type == "feedback" %}
                 </div>
-                <div class="type_msg">
-                    <div class="input_msg_write">
-                        <form method="post" action="/chat">
-                            <input type="text" name="user_input" class="write_msg" placeholder="Type a message"/>
-                            <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o"
-                                                                          aria-hidden="true"></i></button>
-                        </form>
+                <div class="feedback_buttons">
+                    <form method="post" action="/submit_feedback">
+                        <input type="submit" value="1">
+                        <input type="submit" value="2">
+                        <input type="submit" value="3">
+                        <input type="submit" value="4">
+                        <input type="submit" value="5">
+                    </form>
+                </div>
+                {% elif type == "feedback_submitted" %}
+                <div class="incoming_msg">
+                    <div class="incoming_msg_img"><img src="../static/images/chatty_the_chatbot.png"
+                                                       alt="chatty, the chatbot"></div>
+                    <div class="received_msg">
+                        <div class="received_withd_msg">
+                            <p> {{ thank_you_message }}</p>
+                            <span class="time_date">{{ bot_msg_time }}</span></div>
                     </div>
                 </div>
             </div>
+            {% else %}
         </div>
+        <div class="type_msg">
+            <div class="input_msg_write">
+                <form method="post" action="/chat">
+                    <input type="text" name="user_input" class="write_msg" placeholder="Type a message"/>
+                    <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o"
+                                                                  aria-hidden="true"></i></button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
     </div>
+</div>
+</div>
 </div>
 </body>
 </html>
