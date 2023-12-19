@@ -12,12 +12,12 @@ X_train, X_test, y_train, y_test = train_test_split(data['statement'], data['sup
                                                     random_state=42)
 
 # Create TF-IDF vectors for training data
-tfidf_vectorizer = TfidfVectorizer(max_features=5000)
-X_train_vect = tfidf_vectorizer.fit_transform(X_train)
+tfidf_vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
+X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
 
 # Train the Naive Bayes classifier
 classifier = MultinomialNB()
-classifier.fit(X_train_vect, y_train)
+classifier.fit(X_train_tfidf, y_train)
 
 # Preprocess the test data using the same vectorizer
 X_test_tfidf = tfidf_vectorizer.transform(X_test)
@@ -30,10 +30,10 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Classification Report:\n", classification_report(y_test, y_pred))
 
 # ----------------------- model in prod ----------------------- #
-tfidf_vectorizer = TfidfVectorizer(max_features=5000)
-X_data_vect = tfidf_vectorizer.fit_transform(data['statement'])
+tfidf_vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
+X_data_tfidf = tfidf_vectorizer.fit_transform(data['statement'])
 classifier = MultinomialNB()
-classifier.fit(X_data_vect, data['support_level'])
+classifier.fit(X_data_tfidf, data['support_level'])
 
 # Save the trained model to a file
 with open('model.pkl', 'wb') as f:
