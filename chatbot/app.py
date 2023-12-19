@@ -1,5 +1,12 @@
 import logging
+import time
 import uuid
+
+import flask
+from sqlalchemy import select, Engine, update
+from sqlalchemy.orm import Session
+
+import chatbot.orm as orm
 
 from gpt import get_gpt_response
 from util import yaml_from_file, pickle_from_file
@@ -13,10 +20,80 @@ glob_config: dict[str, dict] = {}
 glob_chat_history: list[dict] = []
 glob_classifier: MultinomialNB = None
 glob_tfidf_vectorizer: TfidfVectorizer = None
+glob_db_engine: Engine = None
+
 phone_number = "+49 1910 1217"
 ticket_number = 100
 
 app: Flask = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project2.db"
+orm.db.init_app(app)
+
+
+def get_chat_history(chat_id: int) -> orm.ChatHistory:
+    chat: orm.ChatHistory = orm.ChatHistory.query.filter_by(id=chat_id).one_or_none()
+
+    history = chat.messages
+
+    print("History:")
+    for x in history:
+        print(f"A: {x}")
+
+    return chat
+
+
+def create_chat_history() -> orm.ChatHistory:
+    new_history = orm.ChatHistory()
+    orm.db.session.add(new_history)
+    orm.db.session.commit()
+
+    new_status = orm.ChatStatus(
+        chat_id=new_history.id,
+        status=orm.ChatStatusEnum.started,
+        time_reached=time.time_ns(),
+        active=True
+    )
+    orm.db.session.add(new_status)
+    orm.db.session.commit()
+
+    return new_history
+
+
+def add_chat_message(chat_history: orm.ChatHistory, from_support: bool, content: str) -> orm.ChatMessage:
+    new_message = orm.ChatMessage(
+        chat_id=chat_history.id,
+        from_support=from_support,
+        time_sent=time.time_ns(),
+        content=content
+    )
+    orm.db.session.add(new_message)
+    orm.db.session.commit()
+
+    return new_message
+
+
+def change_chat_status(chat_history: orm.ChatHistory, new_status: orm.ChatStatusEnum) -> orm.ChatStatus:
+    orm.db.session.execute(
+        update(orm.ChatStatus).
+        where(orm.ChatStatus.chat_id == chat_history.id).
+        where(orm.ChatStatus.active is True).
+        values(active=False)
+    )
+
+    print("Old Statuses:")
+    for old_status in chat_history.statuses:
+        print(old_status)
+
+    new_status = orm.ChatStatus(
+        chat_id=chat_history.id,
+        status=new_status,
+        time_reached=time.time_ns(),
+        active=True
+    )
+    orm.db.session.add(new_status)
+    orm.db.session.commit()
+
+    return new_status
 
 
 # TODO imlement max size of message
@@ -26,8 +103,8 @@ def endpoint_prompt(message) -> str:
 
 
 @app.route('/')
-def endpoint_home() -> str:
-    return render_template('index.html', chat_history=glob_chat_history)
+def endpoint_index() -> flask.Response:
+    return redirect('/chat')
 
 
 @app.route('/submit_feedback', methods=['POST'])
@@ -39,10 +116,30 @@ def submit_feedback():
                            support_level=3, bot_msg_time=bot_msg_time, thank_you_message=thank_you_message)
 
 
+@app.route('/chat', methods=['GET', 'POST'])
+def endpoint_chat_no_id():
+    if request.method == 'GET':
+        return render_template('index.html', chat_history=[])
+
+    new_history = create_chat_history()
+    add_chat_message(new_history, False, request.form['user_input'])
+
+    return redirect(f'/chat/{new_history.id}')
+
+
 # For each message in chat_history:
 # Always a pair of user input & bot response
-@app.route('/chat', methods=['POST'])
-def endpoint_chat():
+@app.route('/chat/<int:chat_id>', methods=['GET', 'POST'])
+def endpoint_chat_with_id(chat_id: int):
+    if request.method == 'GET':
+        history = get_chat_history(chat_id)
+
+        print(f"History: {history}")
+        for message in history.messages:
+            print(f"Message: {message}")
+
+        return render_template('index.html', chat_history=history.messages)
+
     global ticket_number
     feedback_message = ""
     user_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
@@ -116,6 +213,9 @@ if __name__ == '__main__':
             f'Exception: {ex}'
         )
         exit(1)
+
+    with app.app_context():
+        orm.db.create_all()
 
     # Start WebApp
     app.run()
