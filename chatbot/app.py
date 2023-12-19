@@ -1,6 +1,7 @@
 import logging
 import time
 import uuid
+from typing import List, Dict, Any
 
 import flask
 from sqlalchemy import select, Engine, update
@@ -30,16 +31,16 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project2.db"
 orm.db.init_app(app)
 
 
-def get_chat_history(chat_id: int) -> orm.ChatHistory:
+def get_chat_history(chat_id: int) -> List[Dict[str, Any]]:
     chat: orm.ChatHistory = orm.ChatHistory.query.filter_by(id=chat_id).one_or_none()
 
-    history = chat.messages
+    messages: List[orm.ChatMessage] = chat.messages
 
-    print("History:")
-    for x in history:
-        print(f"A: {x}")
-
-    return chat
+    return [{
+        'time': datetime.fromtimestamp(message.time_sent / 1e9).strftime("%d/%m/%Y | %H:%M:%S"),
+        'from_support': message.from_support,
+        'content': message.content
+    } for message in messages]
 
 
 def create_chat_history() -> orm.ChatHistory:
@@ -131,17 +132,16 @@ def endpoint_chat_no_id():
 # Always a pair of user input & bot response
 @app.route('/chat/<int:chat_id>', methods=['GET', 'POST'])
 def endpoint_chat_with_id(chat_id: int):
+    history = get_chat_history(chat_id)
+
     if request.method == 'GET':
-        history = get_chat_history(chat_id)
+        return render_template('index.html', chat_history=history)
 
-        print(f"History: {history}")
-        for message in history.messages:
-            print(f"Message: {message}")
+    user_input: str = request.form['user_input']
 
-        return render_template('index.html', chat_history=history.messages)
+    if user_input is None or len(user_input) == 0:
+        return render_template('index.html', chat_history=history)
 
-    global ticket_number
-    feedback_message = ""
     user_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
 
     user_input: str = request.form['user_input']

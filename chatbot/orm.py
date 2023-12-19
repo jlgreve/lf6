@@ -15,25 +15,6 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 
 
-class ChatHistory(db.Model):
-    __tablename__ = 'chat_history'
-
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-
-    statuses: Mapped[List['ChatStatus']] = relationship(
-        back_populates='history', cascade='all, delete-orphan'
-    )
-
-    messages: Mapped[List['ChatMessage']] = relationship(
-        back_populates='history', cascade='all, delete-orphan'
-    )
-
-    feedback: Mapped['ChatFeedback'] = relationship(back_populates='history')
-
-    def __repr__(self):
-        return f'ChatHistory(id={self.id!r})'
-
-
 class ChatStatusEnum(enum.Enum):
     started = 0
     support_escalated = 1
@@ -81,3 +62,22 @@ class ChatFeedback(db.Model):
 
     def __repr__(self):
         return f'ChatFeedback(id={self.id!r})'
+
+
+class ChatHistory(db.Model):
+    __tablename__ = 'chat_history'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+
+    statuses: Mapped[List['ChatStatus']] = relationship(
+        back_populates='history', cascade='all, delete-orphan'
+    )
+
+    messages: Mapped[List['ChatMessage']] = relationship(
+        back_populates='history', cascade='all, delete-orphan', order_by=ChatMessage.time_sent
+    )
+
+    feedback: Mapped['ChatFeedback'] = relationship(back_populates='history')
+
+    def __repr__(self):
+        return f'ChatHistory(id={self.id!r})'
