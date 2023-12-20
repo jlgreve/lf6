@@ -133,6 +133,8 @@ def endpoint_chat_no_id():
 # Always a pair of user input & bot response
 @app.route('/chat/<int:chat_id>', methods=['GET', 'POST'])
 def endpoint_chat_with_id(chat_id: int):
+
+    log = get_logger("Chatbot", level='debug')
     history = get_chat_history(chat_id)
 
     if request.method == 'GET':
