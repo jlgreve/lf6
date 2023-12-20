@@ -1,8 +1,9 @@
+import subprocess
 import logging
 import time
 import uuid
 from typing import List, Dict, Any
-
+from common.get_logger import get_logger
 import flask
 from sqlalchemy import select, Engine, update
 from sqlalchemy.orm import Session
@@ -154,7 +155,7 @@ def endpoint_chat_with_id(chat_id: int):
             bot_response = get_gpt_response(user_input)
         except Exception as e:
             # Log error
-            logging.error(f"Error processing user input: {e}")
+            log.error(f"Error processing user input: {e}")
             # Set bot_response to a default error message
             bot_response = "Sorry, an error occurred. Please try again later."
     elif support_level == 2:
@@ -180,11 +181,22 @@ def endpoint_chat_with_id(chat_id: int):
 
 def classify_level(enquiry: str):
     new_statements_tfidf = glob_tfidf_vectorizer.transform([enquiry])
-
     return glob_classifier.predict(new_statements_tfidf)[0]
 
 
+def execute_file(file_path, log):
+    completed_process = subprocess.run(['python', file_path], capture_output=True, text=True)
+    if completed_process.returncode == 0:
+        log.info(f"Executed {file_path} successfully.")
+    else:
+        log.debug(f"Error: Failed to execute '{file_path}'. "
+                      f"Error output: {completed_process.stderr}")
+
+
 if __name__ == '__main__':
+    log = get_logger("Chatbot", level='debug')
+    # Execute model training
+    execute_file('../model/main.py', log)
     # Load config
     glob_config = yaml_from_file('config.yaml')
 
@@ -200,14 +212,14 @@ if __name__ == '__main__':
         glob_classifier = pickle_from_file(glob_config['models']['classifier'])
         glob_tfidf_vectorizer = pickle_from_file(glob_config['models']['vectorizer'])
     except FileNotFoundError:
-        logging.error(
+        log.error(
             'Fatal Error!\n'
             'The classification model has not been generated.\n'
             'To generate the model, navigate the terminal to "lf6/model/" and run: python main.py'
         )
         exit(1)
     except Exception as ex:
-        logging.error(
+        log.error(
             'Fatal Error!\n'
             'An unexpected exception has occurred while loading the classification model.\n'
             f'Exception: {ex}'
