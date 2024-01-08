@@ -61,9 +61,9 @@ def create_chat_history() -> orm.ChatHistory:
     return new_history
 
 
-def add_chat_message(chat_history: orm.ChatHistory, from_support: bool, content: str) -> orm.ChatMessage:
+def add_chat_message(chat_id: int, from_support: bool, content: str) -> orm.ChatMessage:
     new_message = orm.ChatMessage(
-        chat_id=chat_history.id,
+        chat_id=chat_id,
         from_support=from_support,
         time_sent=time.time_ns(),
         content=content
@@ -118,36 +118,11 @@ def submit_feedback():
                            support_level=3, bot_msg_time=bot_msg_time, thank_you_message=thank_you_message)
 
 
-@app.route('/chat', methods=['GET', 'POST'])
-def endpoint_chat_no_id():
-    if request.method == 'GET':
-        return render_template('index.html', chat_history=[])
+def handle_user_input(chat_id: int, user_input: str):
+    if chat_id is None or user_input is None or len(user_input) == 0:
+        return
 
-    new_history = create_chat_history()
-    add_chat_message(new_history, False, request.form['user_input'])
-
-    return redirect(f'/chat/{new_history.id}')
-
-
-# For each message in chat_history:
-# Always a pair of user input & bot response
-@app.route('/chat/<int:chat_id>', methods=['GET', 'POST'])
-def endpoint_chat_with_id(chat_id: int):
-
-    log = get_logger("Chatbot", level='debug')
-    history = get_chat_history(chat_id)
-
-    if request.method == 'GET':
-        return render_template('index.html', chat_history=history)
-
-    user_input: str = request.form['user_input']
-
-    if user_input is None or len(user_input) == 0:
-        return render_template('index.html', chat_history=history)
-
-    user_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
-
-    user_input: str = request.form['user_input']
+    add_chat_message(chat_id, False, user_input)
 
     # Classify support level
     support_level = classify_level(user_input)
@@ -167,18 +142,45 @@ def endpoint_chat_with_id(chat_id: int):
         bot_response = (f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
                         f"free to contact us under <b>{phone_number}</b> and one of our employees will support you "
                         f"with your problem. To speed things up, please note down your ticket number: #"
-                        f"<b>{ticket_number:06d}</b> so we have an easier time to find your request. We look "
+                        f"<b>{chat_id:06d}</b> so we have an easier time to find your request. We look "
                         f" forward to be hearing from you!")
         feedback_message = (
             "I am sorry for not being able to help you. Please feel free to tell us how you felt about my support "
             "so we are able to improve our services!")
-        ticket_number += 1
-    bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
-    glob_chat_history.append(
-        {'user': user_input, 'bot': bot_response, 'user_time': user_msg_time, 'bot_time': bot_msg_time}
-    )
-    return render_template('index.html', chat_history=glob_chat_history,
-                           support_level=support_level, bot_msg_time=bot_msg_time, feedback_message=feedback_message)
+
+    log.info(f'Bot response: {bot_response}')
+    add_chat_message(chat_id, True, bot_response)
+
+
+@app.route('/chat', methods=['GET', 'POST'])
+def endpoint_chat_no_id():
+    if request.method == 'GET' or request.form['user_input'] is None:
+        return render_template('index.html', chat_history=[])
+
+    new_history = create_chat_history()
+    handle_user_input(new_history.id, request.form['user_input'])
+
+    return redirect(f'/chat/{new_history.id}')
+
+
+# For each message in chat_history:
+# Always a pair of user input & bot response
+@app.route('/chat/<int:chat_id>', methods=['GET', 'POST'])
+def endpoint_chat_with_id(chat_id: int):
+    log.info(f'Got a {request.method} request for the chat history with the id {chat_id}')
+
+    if request.method == 'GET':
+        return render_template('index.html', chat_history=get_chat_history(chat_id))
+
+    user_input: str = request.form['user_input']
+
+    if user_input is None or len(user_input) == 0:
+        log.info('Empty user input.')
+        return render_template('index.html', chat_history=get_chat_history(chat_id))
+
+    handle_user_input(chat_id, user_input)
+
+    return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=0)
 
 
 def classify_level(enquiry: str):
