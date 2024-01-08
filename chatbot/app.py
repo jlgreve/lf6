@@ -61,6 +61,15 @@ def create_chat_history() -> orm.ChatHistory:
     return new_history
 
 
+def create_chat_feedback(chat_id: int, feedback: int):
+    new_feedback = orm.ChatFeedback(
+        chat_id=chat_id,
+        stars=feedback
+    )
+    orm.db.session.add(new_feedback)
+    orm.db.session.commit()
+
+
 def add_chat_message(chat_id: int, from_support: bool, content: str) -> orm.ChatMessage:
     new_message = orm.ChatMessage(
         chat_id=chat_id,
@@ -74,20 +83,21 @@ def add_chat_message(chat_id: int, from_support: bool, content: str) -> orm.Chat
     return new_message
 
 
-def change_chat_status(chat_history: orm.ChatHistory, new_status: orm.ChatStatusEnum) -> orm.ChatStatus:
+def get_chat_status(chat_id: int) -> orm.ChatStatusEnum:
+    chat_status: orm.ChatStatus = orm.ChatStatus.query.filter_by(id=chat_id, active=True).one_or_none()
+    return chat_status.status
+
+
+def change_chat_status(chat_id: int, new_status: orm.ChatStatusEnum) -> orm.ChatStatus:
     orm.db.session.execute(
         update(orm.ChatStatus).
-        where(orm.ChatStatus.chat_id == chat_history.id).
+        where(orm.ChatStatus.chat_id == chat_id).
         where(orm.ChatStatus.active is True).
         values(active=False)
     )
 
-    print("Old Statuses:")
-    for old_status in chat_history.statuses:
-        print(old_status)
-
     new_status = orm.ChatStatus(
-        chat_id=chat_history.id,
+        chat_id=chat_id,
         status=new_status,
         time_reached=time.time_ns(),
         active=True
@@ -108,14 +118,16 @@ def endpoint_prompt(message) -> str:
 def endpoint_index() -> flask.Response:
     return redirect('/chat')
 
+print(orm.ChatStatusEnum.started)
 
-@app.route('/submit_feedback', methods=['POST'])
-def submit_feedback():
+@app.route('/submit_feedback/{int:chat_id}', methods=['POST'])
+def submit_feedback(chat_id: int):
     feedback = int(request.form["feedback"])
-    thank_you_message = "Thank you! Your feedback has been submitted."
-    bot_msg_time = datetime.now().strftime("%d/%m/%Y | %H:%M:%S")
-    return render_template('index.html', chat_history=glob_chat_history,
-                           support_level=3, bot_msg_time=bot_msg_time, thank_you_message=thank_you_message)
+    create_chat_feedback(chat_id, feedback)
+
+    change_chat_status(chat_id, orm.ChatStatusEnum.ended)
+
+    return redirect(f'/chat/{chat_id}')
 
 
 def handle_user_input(chat_id: int, user_input: str):
@@ -129,27 +141,33 @@ def handle_user_input(chat_id: int, user_input: str):
 
     if support_level == 0:
         try:
-            bot_response = get_gpt_response(user_input)
+            add_chat_message(chat_id, True, get_gpt_response(user_input))
         except Exception as e:
             # Log error
             log.error(f"Error processing user input: {e}")
             # Set bot_response to a default error message
-            bot_response = "Sorry, an error occurred. Please try again later."
+            add_chat_message(chat_id, True, "Sorry, an error occurred. Please try again later.")
     elif support_level == 2:
-        bot_response = ("I am glad i was able to help you. Please feel free to tell us how you felt about my support "
-                        "so we are able to improve our services!")
-    else:
-        bot_response = (f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
-                        f"free to contact us under <b>{phone_number}</b> and one of our employees will support you "
-                        f"with your problem. To speed things up, please note down your ticket number: #"
-                        f"<b>{chat_id:06d}</b> so we have an easier time to find your request. We look "
-                        f" forward to be hearing from you!")
-        feedback_message = (
-            "I am sorry for not being able to help you. Please feel free to tell us how you felt about my support "
-            "so we are able to improve our services!")
+        add_chat_message(chat_id, True,
+                         ("I am glad i was able to help you. Please feel free to tell us how you felt about my support "
+                          "so we are able to improve our services!"))
 
-    log.info(f'Bot response: {bot_response}')
-    add_chat_message(chat_id, True, bot_response)
+        change_chat_status(chat_id, orm.ChatStatusEnum.pending_feedback)
+    else:
+        add_chat_message(chat_id, True, (
+            f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
+            f"free to contact us under <b>{phone_number}</b> and one of our employees will support you "
+            f"with your problem. To speed things up, please note down your ticket number: #"
+            f"<b>{chat_id:06d}</b> so we have an easier time to find your request. We look "
+            f" forward to be hearing from you!"))
+
+        add_chat_message(chat_id, True,
+                         (
+                             "I am sorry for not being able to help you. Please feel free to tell us how you felt about my support "
+                             "so we are able to improve our services!"))
+
+        change_chat_status(chat_id, orm.ChatStatusEnum.support_escalated)
+        change_chat_status(chat_id, orm.ChatStatusEnum.pending_feedback)
 
 
 @app.route('/chat', methods=['GET', 'POST'])
@@ -170,17 +188,17 @@ def endpoint_chat_with_id(chat_id: int):
     log.info(f'Got a {request.method} request for the chat history with the id {chat_id}')
 
     if request.method == 'GET':
-        return render_template('index.html', chat_history=get_chat_history(chat_id))
+        return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=get_chat_status(chat_id))
 
     user_input: str = request.form['user_input']
 
     if user_input is None or len(user_input) == 0:
         log.info('Empty user input.')
-        return render_template('index.html', chat_history=get_chat_history(chat_id))
+        return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=get_chat_status(chat_id))
 
     handle_user_input(chat_id, user_input)
 
-    return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=0)
+    return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=get_chat_status(chat_id))
 
 
 def classify_level(enquiry: str):
@@ -194,7 +212,7 @@ def execute_file(file_path, log):
         log.info(f"Executed {file_path} successfully.")
     else:
         log.debug(f"Error: Failed to execute '{file_path}'. "
-                      f"Error output: {completed_process.stderr}")
+                  f"Error output: {completed_process.stderr}")
 
 
 if __name__ == '__main__':
