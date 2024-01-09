@@ -28,8 +28,6 @@ phone_number = "+49 1910 1217"
 ticket_number = 100
 
 app: Flask = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project2.db"
-orm.db.init_app(app)
 
 
 def get_chat_history(chat_id: int) -> List[Dict[str, Any]]:
@@ -221,6 +219,10 @@ if __name__ == '__main__':
     execute_file('../model/main.py', log)
     # Load config
     glob_config = yaml_from_file('config.yaml')
+
+    # Init DB
+    app.config["SQLALCHEMY_DATABASE_URI"] = glob_config['database']['url']
+    orm.db.init_app(app)
 
     # Set up logging to the console
     logging.basicConfig(
