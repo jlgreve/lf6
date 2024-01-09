@@ -86,7 +86,7 @@ def get_chat_status(chat_id: int) -> ChatStatusEnum:
 
 
 def change_chat_status(chat_id: int, new_status: ChatStatusEnum) -> ChatStatus:
-    ChatStatus.query.filter_by(chat_id=chat_id, active=True).update(active=False)
+    ChatStatus.query.filter_by(chat_id=chat_id, active=True).update({'active': False})
 
     new_status = ChatStatus(
         chat_id=chat_id,
