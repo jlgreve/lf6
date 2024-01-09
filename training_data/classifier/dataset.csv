@@ -1,4 +1,4 @@
-,statement,support_level
+number,statement,support_level
 0,My computer is displaying a blue screen error.,1
 1,I'm unable to access a specific application.,1
 2,The internet connection is intermittent.,1
@@ -284,3 +284,405 @@
 282,Thank you for your outstanding assistance,2
 283,Grateful for your continuous help,2
 284,Thanks a bunch for your invaluable support,2
+285, That did the trick!, 2
+286, That resolved the issue., 2
+287, That solved the problem., 2
+288, That sorted it out., 2
+289, That got things running smoothly., 2
+290, That made everything click., 2
+291, That fixed the glitch., 2
+292, That patched things up., 2
+293, That nailed it!, 2
+294, That brought everything back to normal., 2
+295, That got the job done., 2
+296, That worked like a charm., 2
+297, That hit the bullseye., 2
+298, That was the perfect solution., 2
+299, That resolved my dilemma., 2
+300, That answered the call., 2
+301, That was the magic touch., 2
+302, That turned the tide., 2
+303, That got me back on track., 2
+304, That did wonders., 2
+305, That was spot-on., 2
+306, That worked wonders., 2
+307, That was the breakthrough., 2
+308, That did the magic., 2
+309, That cracked the code., 2
+310, That was the winning move., 2
+311, That hit the mark., 2
+312, That was the missing link., 2
+313, That worked out brilliantly., 2
+314, That was the winning formula., 2
+315, That hit the sweet spot., 2
+316, That was the key., 2
+317, That hit the jackpot., 2
+318, That worked out like a dream., 2
+319, That was the silver bullet., 2
+320, That worked like a miracle., 2
+321, That was the golden solution., 2
+322, That worked out flawlessly., 2
+323, That was the masterstroke., 2
+324, That nailed it down., 2
+325, That was the game-changer., 2
+326, That did the job perfectly., 2
+327, That was the fix., 2
+328, That worked out beautifully., 2
+329, That was the right call., 2
+330, That did the trick magnificently., 2
+331, That was the stroke of genius., 2
+332, That hit the nail on the head., 2
+333, That worked like a masterpiece., 2
+334, That was the perfect fix., 2
+335, That patched up the issues., 2
+336, That rectified the situation., 2
+337, That put everything back in order., 2
+338, That straightened things out., 2
+339, That resolved all the glitches., 2
+340, That fixed the bugs., 2
+341, That got things back on track., 2
+342, That repaired the damage., 2
+343, That corrected the problem., 2
+344, That alleviated the issues., 2
+345, That resolved the technical hiccups., 2
+346, That sorted out the mess., 2
+347, That mended the breakdown., 2
+348, That restored functionality., 2
+349, That fixed the malfunction., 2
+350, That remedied the situation., 2
+351, That put an end to the troubles., 2
+352, That repaired the breakdown., 2
+353, That restored normalcy., 2
+354, That fixed the hiccup., 2
+355, That resolved the technical snag., 2
+356, That patched up the glitches., 2
+357, That corrected the malfunction., 2
+358, That fixed the snag., 2
+359, That resolved the technical difficulty., 2
+360, That sorted out the technical issues., 2
+361, That patched things up seamlessly., 2
+362, That got everything back in working order., 2
+363, That repaired the system., 2
+364, That fixed the errors., 2
+365, That sorted out the kinks., 2
+366, That put an end to the glitches., 2
+367, That corrected the faults., 2
+368, That mended the technical issues., 2
+369, That fixed the flaws., 2
+370, That resolved the breakdown., 2
+371, That restored the functionality., 2
+372, That corrected the hitches., 2
+373, That patched up the technical problems., 2
+374, That got everything back to normal., 2
+375, That repaired the bugs., 2
+376, That resolved the malfunction., 2
+377, That fixed the breakdown., 2
+378, That sorted out the technical glitches., 2
+379, That put an end to the technical hiccups., 2
+380, That fixed the technical issues., 2
+381, resolved the technical difficulties., 2
+382, sorted things out., 2
+383, got everything back on its feet., 2
+384, made everything run smoothly., 2
+385, handled the technical glitches., 2
+386, tackled the issues., 2
+387, ironed out the problems., 2
+388, got the system back in shape., 2
+389, brought everything back to order., 2
+390, straightened out the technical mess., 2
+391, addressed the technical challenges., 2
+392, navigated through the issues., 2
+393, put an end to the technical chaos., 2
+394, fixed the hiccup in no time., 2
+395, restored the system's harmony., 2
+396, worked out the technical conundrum., 2
+397, brought an end to the technical turmoil., 2
+398, resolved the digital puzzle., 2
+399, patched up the digital woes., 2
+400, addressed the digital predicament., 2
+401, navigated through the digital maze., 2
+402, put an end to the digital confusion., 2
+403, straightened out the digital mess., 2
+404, fixed the digital hiccup., 2
+405, restored digital harmony., 2
+406, worked out the digital conundrum., 2
+407, brought an end to the digital turmoil., 2
+408, resolved the online challenges., 2
+409, tackled the online issues., 2
+410, handled the online glitches., 2
+411, addressed the online predicament., 2
+412, navigated through the online maze., 2
+413, put an end to the online confusion., 2
+414, straightened out the online mess., 2
+415, fixed the online hiccup., 2
+416, restored online harmony., 2
+417, worked out the online conundrum., 2
+418, brought an end to the online turmoil., 2
+419, resolved the virtual challenges., 2
+420, tackled the virtual issues., 2
+421, handled the virtual glitches., 2
+422, addressed the virtual predicament., 2
+423, navigated through the virtual maze., 2
+424, put an end to the virtual confusion., 2
+425, straightened out the virtual mess., 2
+426, fixed the virtual hiccup., 2
+427, restored virtual harmony., 2
+428, worked out the virtual conundrum., 2
+429, brought an end to the virtual turmoil., 2
+430, resolved the cyber challenges., 2
+431, tackled the cyber issues., 2
+432, handled the cyber glitches., 2
+433, addressed the cyber predicament., 2
+434, navigated through the cyber maze., 2
+435, put an end to the cyber confusion., 2
+436, straightened out the cyber mess., 2
+437, fixed the cyber hiccup., 2
+438, restored cyber harmony., 2
+439, worked out the cyber conundrum., 2
+440, brought an end to the cyber turmoil., 2
+441, resolved the network challenges., 2
+442, tackled the network issues., 2
+443, handled the network glitches., 2
+444, addressed the network predicament., 2
+445, navigated through the network maze., 2
+446, put an end to the network confusion., 2
+447, straightened out the network mess., 2
+448, fixed the network hiccup., 2
+449, restored network harmony., 2
+450, worked out the network conundrum., 2
+451, brought an end to the network turmoil., 2
+452, resolved the connectivity challenges., 2
+453, tackled the connectivity issues., 2
+454, handled the connectivity glitches., 2
+455, addressed the connectivity predicament., 2
+456, navigated through the connectivity maze., 2
+457, put an end to the connectivity confusion., 2
+458, straightened out the connectivity mess., 2
+459, fixed the connectivity hiccup., 2
+460, restored connectivity harmony., 2
+461, worked out the connectivity conundrum., 2
+462, brought an end to the connectivity turmoil., 2
+463, resolved the software challenges., 2
+464, tackled the software issues., 2
+465, handled the software glitches., 2
+466, addressed the software predicament., 2
+467, navigated through the software maze., 2
+468, put an end to the software confusion., 2
+469, straightened out the software mess., 2
+470, fixed the software hiccup., 2
+471, restored software harmony., 2
+472, worked out the software conundrum., 2
+473, brought an end to the software turmoil., 2
+474, resolved the application challenges., 2
+475, tackled the application issues., 2
+476, handled the application glitches., 2
+477, addressed the application predicament., 2
+478, navigated through the application maze., 2
+479, put an end to the application confusion., 2
+480, straightened out the application mess., 2
+481, fixed the application hiccup., 2
+482, restored application harmony., 2
+483, worked out the application conundrum., 2
+484, brought an end to the application turmoil., 2
+485, resolved the hardware challenges., 2
+486, tackled the hardware issues., 2
+487, handled the hardware glitches., 2
+488, addressed the hardware predicament., 2
+489, navigated through the hardware maze., 2
+490, put an end to the hardware confusion., 2
+491, straightened out the hardware mess., 2
+492, fixed the hardware hiccup., 2
+493, restored hardware harmony., 2
+494, worked out the hardware conundrum., 2
+495, brought an end to the hardware turmoil., 2
+496, resolved the device challenges., 2
+497, tackled the device issues., 2
+498, handled the device glitches., 2
+499, addressed the device predicament., 2
+500, navigated through the device maze., 2
+501, put an end to the device confusion., 2
+502, straightened out the device mess., 2
+503, fixed the device hiccup., 2
+504, restored device harmony., 2
+505, worked out the device conundrum., 2
+506, brought an end to the device turmoil., 2
+507, resolved the server challenges., 2
+508, tackled the server issues., 2
+509, handled the server glitches., 2
+510, addressed the server predicament., 2
+511, navigated through the server maze., 2
+512, put an end to the server confusion., 2
+513, straightened out the server mess., 2
+514, fixed the server hiccup., 2
+515, The solution worked perfectly., 2
+516, Issue resolved successfully., 2
+517, Everything is back on track., 2
+518, Problem fixed thanks a lot., 2
+519, Worked wonders thank you., 2
+520, Glitch sorted out effortlessly., 2
+521, The fix was spot-on., 2
+522, The resolution was effective., 2
+523, The problem got sorted., 2
+524, Nailed it with the solution., 2
+525, Solved it like a pro., 2
+526, Crisis averted thanks to your help., 2
+527, Got my system back to normal., 2
+528, Your assistance made a difference., 2
+529, Everything is functioning again., 2
+530, The fix resolved the issue., 2
+531, Your guidance worked like magic., 2
+532, Glitch fixed crisis avoided., 2
+533, Smooth operation restored., 2
+534, The remedy worked wonders., 2
+535, Issue sorted out seamlessly., 2
+536, The resolution was on point., 2
+537, Your solution did the trick., 2
+538, Everything is back in order., 2
+539, Worked out the problem perfectly., 2
+540, Thanks for the effective fix., 2
+541, Your support brought relief., 2
+542, Crisis resolved thanks to you., 2
+543, The fix was a game-changer., 2
+544, Glitch addressed successfully., 2
+545, The resolution worked flawlessly., 2
+546, Problem tackled thanks a ton., 2
+547, The remedy was a success., 2
+548, Everything is back to normalcy., 2
+549, The fix hit the bullseye., 2
+550, Issue handled with expertise., 2
+551, Smooth sailing after your help., 2
+552, The resolution hit the mark., 2
+553, Crisis averted thanks to your support., 2
+554, The fix resolved the technical hiccups., 2
+555, Your guidance sorted out the mess., 2
+556, The remedy mended the breakdown., 2
+557, Functionality restored successfully., 2
+558, The resolution remedied the situation., 2
+559, Problem fixed and normalcy restored., 2
+560, The remedy put an end to the troubles., 2
+561, Glitch repaired successfully., 2
+562, The resolution restored normalcy., 2
+563, Your support fixed the malfunction., 2
+564, The fix remedied the technical issues., 2
+565, Everything is back to normal now., 2
+566, The remedy resolved the technical difficulty., 2
+567, Your assistance sorted out the technical issues., 2
+568, The resolution patched things up seamlessly., 2
+569, Problem solved with your guidance., 2
+570, The remedy got everything back in working order., 2
+571, Your support repaired the system., 2
+572, Everything is back on track now., 2
+573, The fix corrected the errors., 2
+574, The resolution sorted out the kinks., 2
+575, Crisis averted thanks to your expertise., 2
+576, The remedy put an end to the glitches., 2
+577, Glitch corrected successfully., 2
+578, The resolution mended the technical issues., 2
+579, Problem fixed and normalcy restored., 2
+580, Your support resolved the breakdown., 2
+581, The fix restored the functionality., 2
+582, Everything is functioning seamlessly., 2
+583, The remedy corrected the hitches., 2
+584, Crisis averted thanks to your assistance., 2
+585, The resolution patched up the technical problems., 2
+586, Problem solved with your guidance., 2
+587, The remedy got everything back to normal., 2
+588, Your support repaired the bugs., 2
+589, Everything is back on track now., 2
+590, The fix resolved the malfunction., 2
+591, The resolution fixed the breakdown., 2
+592, Problem sorted out seamlessly., 2
+593, Your assistance got things back in working order., 2
+594, The remedy repaired the system., 2
+595, Crisis averted thanks to your expertise., 2
+596, The resolution corrected the errors., 2
+597, Glitch addressed successfully., 2
+598, Your support sorted out the kinks., 2
+599, The fix put an end to the glitches., 2
+600 Hi there! I forgot my password. Can you help me reset it? 0
+601 Hello! I'm locked out of my account. How can I regain access? 0
+602 Greetings! I can't remember my password. What should I do? 0
+603 Hey! I need assistance with a password reset. Can you guide me through? 0
+604 Hi! My password isn't working. Any advice on resolving this? 0
+605 Good day! I'm having trouble logging in. Can you help me recover my account? 0
+606 Hello I need to reset my password. Can you assist me with that? 0
+607 Hi there! I can't access my account. How can I reset my password? 0
+608 Greetings! I forgot my password. Can you provide support? 0
+609 Hey! I'm locked out of my account. What steps should I take? 0
+610 Hi! I need help with a password reset. Can you guide me through? 0
+611 Good day! I can't remember my password. What should I do? 0
+612 Hello! My password isn't working. Any advice on resolving this? 0
+613 Hi there! I'm having trouble logging in. Can you help me recover my account? 0
+614 Hey I need to reset my password. Can you assist me with that? 0
+615 Greetings! I can't access my account. How can I reset my password? 0
+616 Hello! I forgot my password. Can you help me reset it? 0
+617 Hi there! I'm locked out of my account. How can I regain access? 0
+618 Greetings! I can't remember my password. What should I do? 0
+619 Hey! I need assistance with a password reset. Can you guide me through? 0
+620 Hi! My password isn't working. Any advice on resolving this? 0
+621 Good day! I'm having trouble logging in. Can you help me recover my account? 0
+622 Hello I need to reset my password. Can you assist me with that? 0
+623 Hi there! I can't access my account. How can I reset my password? 0
+624 Greetings! I forgot my password. Can you provide support? 0
+625 Hey! I'm locked out of my account. What steps should I take? 0
+626 Hi! I need help with a password reset. Can you guide me through? 0
+627 Good day! I can't remember my password. What should I do? 0
+628 Hello! My password isn't working. Any advice on resolving this? 0
+629 Hi there! I'm having trouble logging in. Can you help me recover my account? 0
+630 Hey I need to reset my password. Can you assist me with that? 0
+631 Greetings! I can't access my account. How can I reset my password? 0
+632 Hello! I forgot my password. Can you help me reset it? 0
+633 Hi there! I'm locked out of my account. How can I regain access? 0
+634 Greetings! I can't remember my password. What should I do? 0
+635 Hey! I need assistance with a password reset. Can you guide me through? 0
+636 Hi! My password isn't working. Any advice on resolving this? 0
+637 Good day! I'm having trouble logging in. Can you help me recover my account? 0
+638 Hello I need to reset my password. Can you assist me with that? 0
+639 Hi there! I can't access my account. How can I reset my password? 0
+640 Greetings! I forgot my password. Can you provide support? 0
+641 Hey! I'm locked out of my account. What steps should I take? 0
+642 Hi! I need help with a password reset. Can you guide me through? 0
+643 Good day! I can't remember my password. What should I do? 0
+644 Hello! My password isn't working. Any advice on resolving this? 0
+645 Hi there! I'm having trouble logging in. Can you help me recover my account? 0
+646 Hey I need to reset my password. Can you assist me with that? 0
+647 Greetings! I can't access my account. How can I reset my password? 0
+648 Hello! I forgot my password. Can you help me reset it? 0
+649 Hi there! I'm locked out of my account. How can I regain access? 0
+650 Greetings! I can't remember my password. What should I do? 0
+651 Hey! I need assistance with a password reset. Can you guide me through? 0
+652 Hi! My password isn't working. Any advice on resolving this? 0
+653 Good day! I'm having trouble logging in. Can you help me recover my account? 0
+654 Hello I need to reset my password. Can you assist me with that? 0
+655 Hi there! I can't access my account. How can I reset my password? 0
+656 Greetings! I forgot my password. Can you provide support? 0
+657 Hey! I'm locked out of my account. What steps should I take? 0
+658 Hi! I need help with a password reset. Can you guide me through? 0
+659 Good day! I can't remember my password. What should I do? 0
+660 Hello! My password isn't working. Any advice on resolving this? 0
+661 Hi there! I'm having trouble logging in. Can you help me recover my account? 0
+662 Hey I need to reset my password. Can you assist me with that? 0
+663 Greetings! I can't access my account. How can I reset my password? 0
+664 Hello! I forgot my password. Can you help me reset it? 0
+665 Hi there! I'm locked out of my account. How can I regain access? 0
+666 Greetings! I can't remember my password. What should I do? 0
+667 Hey! I need assistance with a password reset. Can you guide me through? 0
+668 Hello 0
+669 Hi 0
+670 Greetings 0
+671 Hey 0
+672 Good day 0
+673 How are you doing? 0
+674 What's up? 0
+675 Hey there! 0
+676 Howdy! 0
+677 What's new? 0
+678 Hello, can you assist me? 0
+679 Hi, I have a question. 0
+680 Greetings, I need some help. 0
+681 Hey, can you guide me? 0
+682 Good day, I require assistance. 0
+683 Hello, I'm here for help. 0
+684 Hi, can you provide support? 0
+685 Greetings, I have a query. 0
+686 Hey, need your assistance. 0

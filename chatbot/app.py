@@ -80,9 +80,9 @@ def add_chat_message(chat_id: int, from_support: bool, content: str) -> ChatMess
     return new_message
 
 
-def get_chat_status(chat_id: int) -> ChatStatusEnum:
-    chat_status: ChatStatus = ChatStatus.query.filter_by(id=chat_id, active=True).one_or_none()
-    return chat_status.status if chat_status is not None else 0
+def get_chat_status(chat_id: int) -> int:
+    chat_status: ChatStatus = ChatStatus.query.filter_by(chat_id=chat_id, active=True).one_or_none()
+    return chat_status.status.value if chat_status is not None else 0
 
 
 def change_chat_status(chat_id: int, new_status: ChatStatusEnum) -> ChatStatus:
