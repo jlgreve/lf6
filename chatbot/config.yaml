@@ -5,4 +5,4 @@ models:
   classifier: "../model/model.pkl"
   vectorizer: "../model/vectorizer.pkl"
 database:
-  url: "sqlite:///project2.db"
+  url: "sqlite:///chatbot.db"

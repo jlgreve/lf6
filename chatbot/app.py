@@ -5,6 +5,9 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 import flask
+from sqlalchemy import select, Engine, update
+from sqlalchemy.orm import Session
+from orm import ChatStatus, ChatFeedback, ChatHistory, ChatMessage, ChatStatusEnum
 from flask import Flask, request, render_template, redirect
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
@@ -29,9 +32,9 @@ app: Flask = Flask(__name__)
 
 
 def get_chat_history(chat_id: int) -> List[Dict[str, Any]]:
-    chat: orm.ChatHistory = orm.ChatHistory.query.filter_by(id=chat_id).one_or_none()
+    chat: ChatHistory = ChatHistory.query.filter_by(id=chat_id).one_or_none()
 
-    messages: List[orm.ChatMessage] = chat.messages
+    messages: List[ChatMessage] = chat.messages
 
     return [{
         'time': datetime.fromtimestamp(message.time_sent / 1e9).strftime("%d/%m/%Y | %H:%M:%S"),
@@ -40,14 +43,14 @@ def get_chat_history(chat_id: int) -> List[Dict[str, Any]]:
     } for message in messages]
 
 
-def create_chat_history() -> orm.ChatHistory:
-    new_history = orm.ChatHistory()
+def create_chat_history() -> ChatHistory:
+    new_history = ChatHistory()
     orm.db.session.add(new_history)
     orm.db.session.commit()
 
-    new_status = orm.ChatStatus(
+    new_status = ChatStatus(
         chat_id=new_history.id,
-        status=orm.ChatStatusEnum.started,
+        status=ChatStatusEnum.started,
         time_reached=time.time_ns(),
         active=True
     )
@@ -58,7 +61,7 @@ def create_chat_history() -> orm.ChatHistory:
 
 
 def create_chat_feedback(chat_id: int, feedback: int):
-    new_feedback = orm.ChatFeedback(
+    new_feedback = ChatFeedback(
         id=chat_id,
         stars=feedback
     )
@@ -66,7 +69,7 @@ def create_chat_feedback(chat_id: int, feedback: int):
     orm.db.session.commit()
 
 
-def add_chat_message(chat_id: int, from_support: bool, content: str) -> orm.ChatMessage:
+def add_chat_message(chat_id: int, from_support: bool, content: str) -> ChatMessage:
     new_message = orm.ChatMessage(
         chat_id=chat_id,
         from_support=from_support,
@@ -79,26 +82,22 @@ def add_chat_message(chat_id: int, from_support: bool, content: str) -> orm.Chat
     return new_message
 
 
-def get_chat_status(chat_id: int) -> int:
-    chat_status: orm.ChatStatus = orm.ChatStatus.query.filter_by(id=chat_id, active=True).one_or_none()
-    return chat_status.status.value
+def get_chat_status(chat_id: int) -> ChatStatusEnum:
+    chat_status: ChatStatus = ChatStatus.query.filter_by(id=chat_id, active=True).one_or_none()
+    return chat_status.status
 
 
-def change_chat_status(chat_id: int, new_status: orm.ChatStatusEnum) -> orm.ChatStatus:
-    orm.db.session.execute(
-        update(orm.ChatStatus).
-        where(orm.ChatStatus.chat_id == chat_id).
-        where(orm.ChatStatus.active is True).
-        values(active=False)
-    )
+def change_chat_status(chat_id: int, new_status: ChatStatusEnum) -> ChatStatus:
+    ChatStatus.query.filter_by(chat_id=chat_id, active=True).update(active=False)
 
-    new_status = orm.ChatStatus(
+    new_status = ChatStatus(
         chat_id=chat_id,
         status=new_status,
         time_reached=time.time_ns(),
         active=True
     )
     orm.db.session.add(new_status)
+
     orm.db.session.commit()
     return new_status
 
@@ -119,7 +118,7 @@ def submit_feedback(chat_id: int):
     feedback = int(request.form["feedback"])
     create_chat_feedback(chat_id, feedback)
 
-    change_chat_status(chat_id, orm.ChatStatusEnum.ended)
+    change_chat_status(chat_id, ChatStatusEnum.ended)
     add_chat_message(chat_id, True, "Thank you for submitting your feedback!")
 
     return redirect(f'/chat/{chat_id}')
@@ -146,7 +145,7 @@ def handle_user_input(chat_id: int, user_input: str):
                          ("I am glad i was able to help you. Please feel free to tell us how you felt about my support "
                           "so we are able to improve our services!"))
 
-        change_chat_status(chat_id, orm.ChatStatusEnum.pending_feedback)
+        change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
     else:
         add_chat_message(chat_id, True, (
             f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
@@ -160,8 +159,8 @@ def handle_user_input(chat_id: int, user_input: str):
                              "I am sorry for not being able to help you. Please feel free to tell us how you felt about my support "
                              "so we are able to improve our services!"))
 
-        change_chat_status(chat_id, orm.ChatStatusEnum.support_escalated)
-        change_chat_status(chat_id, orm.ChatStatusEnum.pending_feedback)
+        change_chat_status(chat_id, ChatStatusEnum.support_escalated)
+        change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
 
 @app.route('/chat', methods=['GET', 'POST'])
 def endpoint_chat_no_id():
@@ -214,8 +213,9 @@ def execute_file(file_path, log):
 
 if __name__ == '__main__':
     log = get_logger("Chatbot", level='debug')
+
     # Execute model training
-    #    execute_file('../model/main.py', log)
+    #execute_file('../model/main.py', log)
     # Load config
     glob_config = yaml_from_file('config.yaml')
 
