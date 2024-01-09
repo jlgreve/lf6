@@ -63,6 +63,15 @@
                     </form>
                 </div>
                 {% elif chat_status == 3 %}
+                {% elif chat_status == 4 %}
+                <div style="margin: auto;width: 50%; padding: 10px;">
+                    <form method="post" action="/submit_resolved/{{ id }}">
+                        <input type="submit" name="feedback" value="1"
+                               style="background-color: #3bb143; height:65px; width:100px">
+                        <input type="submit" name="feedback" value="0"
+                               style="background-color: #b90e0a; height:65px; width:100px">
+                    </form>
+                </div>
                 {% else %}
             </div>
             <div class="type_msg">
