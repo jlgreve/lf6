@@ -179,7 +179,7 @@ def handle_user_input(chat_id: int, user_input: str):
                              "so we are able to improve our services!"))
 
         change_chat_status(chat_id, ChatStatusEnum.support_escalated)
-        change_chat_status(chat_id, ChatStatusEnum.pending_resolved)
+        change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
 
 @app.route('/chat', methods=['GET', 'POST'])
 def endpoint_chat_no_id():
