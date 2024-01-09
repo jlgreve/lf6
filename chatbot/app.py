@@ -1,21 +1,19 @@
-import subprocess
 import logging
+import subprocess
 import time
-import uuid
-from typing import List, Dict, Any
-from common.get_logger import get_logger
-import flask
-from sqlalchemy import select, Engine, update
-from sqlalchemy.orm import Session
-
-import chatbot.orm as orm
-
-from gpt import get_gpt_response
-from util import yaml_from_file, pickle_from_file
 from datetime import datetime
+from typing import List, Dict, Any
+
+import flask
 from flask import Flask, request, render_template, redirect
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
+from sqlalchemy import Engine, update
+
+import chatbot.orm as orm
+from common.get_logger import get_logger
+from gpt import get_gpt_response
+from util import yaml_from_file, pickle_from_file
 
 # Global variables
 glob_config: dict[str, dict] = {}
@@ -61,7 +59,7 @@ def create_chat_history() -> orm.ChatHistory:
 
 def create_chat_feedback(chat_id: int, feedback: int):
     new_feedback = orm.ChatFeedback(
-        chat_id=chat_id,
+        id=chat_id,
         stars=feedback
     )
     orm.db.session.add(new_feedback)
@@ -81,9 +79,9 @@ def add_chat_message(chat_id: int, from_support: bool, content: str) -> orm.Chat
     return new_message
 
 
-def get_chat_status(chat_id: int) -> orm.ChatStatusEnum:
+def get_chat_status(chat_id: int) -> int:
     chat_status: orm.ChatStatus = orm.ChatStatus.query.filter_by(id=chat_id, active=True).one_or_none()
-    return chat_status.status
+    return chat_status.status.value
 
 
 def change_chat_status(chat_id: int, new_status: orm.ChatStatusEnum) -> orm.ChatStatus:
@@ -102,7 +100,6 @@ def change_chat_status(chat_id: int, new_status: orm.ChatStatusEnum) -> orm.Chat
     )
     orm.db.session.add(new_status)
     orm.db.session.commit()
-
     return new_status
 
 
@@ -116,9 +113,8 @@ def endpoint_prompt(message) -> str:
 def endpoint_index() -> flask.Response:
     return redirect('/chat')
 
-print(orm.ChatStatusEnum.started)
 
-@app.route('/submit_feedback/{int:chat_id}', methods=['POST'])
+@app.route('/submit_feedback/<int:chat_id>', methods=['POST'])
 def submit_feedback(chat_id: int):
     feedback = int(request.form["feedback"])
     create_chat_feedback(chat_id, feedback)
@@ -136,7 +132,6 @@ def handle_user_input(chat_id: int, user_input: str):
 
     # Classify support level
     support_level = classify_level(user_input)
-
     if support_level == 0:
         try:
             add_chat_message(chat_id, True, get_gpt_response(user_input))
@@ -167,7 +162,6 @@ def handle_user_input(chat_id: int, user_input: str):
         change_chat_status(chat_id, orm.ChatStatusEnum.support_escalated)
         change_chat_status(chat_id, orm.ChatStatusEnum.pending_feedback)
 
-
 @app.route('/chat', methods=['GET', 'POST'])
 def endpoint_chat_no_id():
     if request.method == 'GET' or request.form['user_input'] is None:
@@ -186,17 +180,21 @@ def endpoint_chat_with_id(chat_id: int):
     log.info(f'Got a {request.method} request for the chat history with the id {chat_id}')
 
     if request.method == 'GET':
-        return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=get_chat_status(chat_id))
+        return render_template('index.html',
+                               chat_history=get_chat_history(chat_id),
+                               chat_status=get_chat_status(chat_id), id=chat_id)
 
     user_input: str = request.form['user_input']
 
     if user_input is None or len(user_input) == 0:
         log.info('Empty user input.')
-        return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=get_chat_status(chat_id))
+        return render_template('index.html',
+                               chat_history=get_chat_history(chat_id),
+                               chat_status=get_chat_status(chat_id), id=chat_id)
 
     handle_user_input(chat_id, user_input)
-
-    return render_template('index.html', chat_history=get_chat_history(chat_id), chat_status=get_chat_status(chat_id))
+    return render_template('index.html', chat_history=get_chat_history(chat_id),
+                           chat_status=get_chat_status(chat_id), id=chat_id)
 
 
 def classify_level(enquiry: str):
@@ -216,7 +214,7 @@ def execute_file(file_path, log):
 if __name__ == '__main__':
     log = get_logger("Chatbot", level='debug')
     # Execute model training
-    execute_file('../model/main.py', log)
+    #    execute_file('../model/main.py', log)
     # Load config
     glob_config = yaml_from_file('config.yaml')
 

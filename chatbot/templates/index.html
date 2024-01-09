@@ -46,10 +46,10 @@
                     </div>
                     {% endif %}
                     {% endfor %}
-                    {% if chat_status == "ChatStatusEnum.pending_feedback" %}
+                    {% if chat_status == 2 %}
                 </div>
                 <div style="margin: auto;width: 50%; padding: 10px;">
-                    <form method="post" action="/submit_feedback">
+                    <form method="post" action="/submit_feedback/{{ id }}">
                         <input type="submit" name="feedback" value="1"
                                style="background-color: #ff0000; height:65px; width:100px">
                         <input type="submit" name="feedback" value="2"
@@ -62,7 +62,7 @@
                                style="background-color: #63ff00; height:65px; width:100px">
                     </form>
                 </div>
-                {% elif chat_status == "ChatStatusEnum.ended" %}
+                {% elif chat_status == 3 %}
                 {% else %}
             </div>
             <div class="type_msg">
