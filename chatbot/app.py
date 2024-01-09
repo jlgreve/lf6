@@ -5,17 +5,15 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 import flask
-from sqlalchemy import select, Engine, update
-from sqlalchemy.orm import Session
-from orm import ChatStatus, ChatFeedback, ChatHistory, ChatMessage, ChatStatusEnum
 from flask import Flask, request, render_template, redirect
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
-from sqlalchemy import Engine, update
+from sqlalchemy import Engine
 
 import chatbot.orm as orm
 from common.get_logger import get_logger
 from gpt import get_gpt_response
+from orm import ChatStatus, ChatFeedback, ChatHistory, ChatMessage, ChatStatusEnum
 from util import yaml_from_file, pickle_from_file
 
 # Global variables
