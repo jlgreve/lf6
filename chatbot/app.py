@@ -120,6 +120,7 @@ def submit_feedback(chat_id: int):
     create_chat_feedback(chat_id, feedback)
 
     change_chat_status(chat_id, orm.ChatStatusEnum.ended)
+    add_chat_message(chat_id, True, "Thank you for submitting your feedback!")
 
     return redirect(f'/chat/{chat_id}')
 
