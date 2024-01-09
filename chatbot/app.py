@@ -13,7 +13,7 @@ from sqlalchemy import Engine
 import orm
 from common.get_logger import get_logger
 from gpt import get_gpt_response
-from orm import ChatStatus, ChatFeedback, ChatHistory, ChatMessage, ChatStatusEnum
+from orm import ChatStatus, ChatResolved, ChatFeedback, ChatHistory, ChatMessage, ChatStatusEnum
 from util import yaml_from_file, pickle_from_file
 
 # Global variables
@@ -67,6 +67,15 @@ def create_chat_feedback(chat_id: int, feedback: int):
     orm.db.session.commit()
 
 
+def create_chat_resolved(chat_id: int, resolved: int):
+    new_resolved = ChatResolved(
+        id=chat_id,
+        resolved=resolved
+    )
+    orm.db.session.add(new_resolved)
+    orm.db.session.commit()
+
+
 def add_chat_message(chat_id: int, from_support: bool, content: str) -> ChatMessage:
     new_message = orm.ChatMessage(
         chat_id=chat_id,
@@ -111,6 +120,18 @@ def endpoint_index() -> flask.Response:
     return redirect('/chat')
 
 
+@app.route('/submit_resolved/<int:chat_id>/<int:resolved>', methods=['POST'])
+def submit_resolved(chat_id: int, resolved: int):
+    if resolved is None or (resolved != 0 and resolved != 1):
+        return redirect(f'/chat/{chat_id}')
+
+    create_chat_resolved(chat_id, resolved)
+
+    change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
+
+    return redirect(f'/chat/{chat_id}')
+
+
 @app.route('/submit_feedback/<int:chat_id>', methods=['POST'])
 def submit_feedback(chat_id: int):
     feedback = int(request.form["feedback"])
@@ -143,7 +164,7 @@ def handle_user_input(chat_id: int, user_input: str):
                          ("I am glad i was able to help you. Please feel free to tell us how you felt about my support "
                           "so we are able to improve our services!"))
 
-        change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
+        change_chat_status(chat_id, ChatStatusEnum.pending_resolved)
     else:
         add_chat_message(chat_id, True, (
             f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
@@ -158,7 +179,7 @@ def handle_user_input(chat_id: int, user_input: str):
                              "so we are able to improve our services!"))
 
         change_chat_status(chat_id, ChatStatusEnum.support_escalated)
-        change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
+        change_chat_status(chat_id, ChatStatusEnum.pending_resolved)
 
 @app.route('/chat', methods=['GET', 'POST'])
 def endpoint_chat_no_id():

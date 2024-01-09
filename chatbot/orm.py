@@ -20,6 +20,7 @@ class ChatStatusEnum(enum.Enum):
     support_escalated = 1
     pending_feedback = 2
     ended = 3
+    pending_resolved = 4
 
 
 class ChatStatus(db.Model):
@@ -52,6 +53,18 @@ class ChatMessage(db.Model):
         return f'ChatHistory(id={self.id!r}, chat_id={self.chat_id!r}, from_support={self.from_support!r}, time_sent={self.time_sent!r}, content={self.content!r})'
 
 
+class ChatResolved(db.Model):
+    __tablename__ = 'chat_resolved'
+
+    id: Mapped[int] = mapped_column(ForeignKey('chat_history.id'), primary_key=True)
+    resolved: Mapped[int] = mapped_column()
+
+    history: Mapped['ChatHistory'] = relationship(back_populates='resolved')
+
+    def __repr__(self):
+        return f'ChatResolved(id={self.id!r}, resolved={self.resolved!r})'
+
+
 class ChatFeedback(db.Model):
     __tablename__ = 'chat_feedback'
 
@@ -61,7 +74,7 @@ class ChatFeedback(db.Model):
     history: Mapped['ChatHistory'] = relationship(back_populates='feedback')
 
     def __repr__(self):
-        return f'ChatFeedback(id={self.id!r})'
+        return f'ChatFeedback(id={self.id!r}, stars={self.stars!r})'
 
 
 class ChatHistory(db.Model):
@@ -77,6 +90,7 @@ class ChatHistory(db.Model):
         back_populates='history', cascade='all, delete-orphan', order_by=ChatMessage.time_sent
     )
 
+    resolved: Mapped['ChatResolved'] = relationship(back_populates='history')
     feedback: Mapped['ChatFeedback'] = relationship(back_populates='history')
 
     def __repr__(self):
