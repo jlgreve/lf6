@@ -120,6 +120,22 @@ def endpoint_index() -> flask.Response:
     return redirect('/chat')
 
 
+def escalate_support(chat_id):
+    add_chat_message(chat_id, True, (
+        f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
+        f"free to contact us under <b>{phone_number}</b> and one of our employees will support you "
+        f"with your problem. To speed things up, please note down your ticket number: #"
+        f"<b>{chat_id:06d}</b> so we have an easier time to find your request. We look "
+        f" forward to be hearing from you!"))
+
+    add_chat_message(chat_id, True,
+                 (
+                     "I am sorry for not being able to help you. Please feel free to tell us how you felt about my support "
+                     "so we are able to improve our services!"))
+
+    change_chat_status(chat_id, ChatStatusEnum.support_escalated)
+
+
 @app.route('/submit_resolved/<int:chat_id>', methods=['POST'])
 def submit_resolved(chat_id: int):
     resolved = int(request.form["resolved"])
@@ -127,6 +143,14 @@ def submit_resolved(chat_id: int):
         return redirect(f'/chat/{chat_id}')
 
     create_chat_resolved(chat_id, resolved)
+    if resolved == 1:
+        add_chat_message(chat_id, True,
+                         (
+                             "I am glad i was able to help you. Please feel "
+                             "free to tell us how you felt about my support "
+                             "so we are able to improve our services!"))
+    if resolved == 0:
+        escalate_support(chat_id)
 
     change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
 
@@ -161,25 +185,11 @@ def handle_user_input(chat_id: int, user_input: str):
             # Set bot_response to a default error message
             add_chat_message(chat_id, True, "Sorry, an error occurred. Please try again later.")
     elif support_level == 2:
-        add_chat_message(chat_id, True,
-                         ("I am glad i was able to help you. Please feel free to tell us how you felt about my support "
-                          "so we are able to improve our services!"))
+        add_chat_message(chat_id, True, "Did that resolve your issue?")
 
         change_chat_status(chat_id, ChatStatusEnum.pending_resolved)
     else:
-        add_chat_message(chat_id, True, (
-            f"I apologize for the inconvenience, but I am not able to understand your request. Please feel "
-            f"free to contact us under <b>{phone_number}</b> and one of our employees will support you "
-            f"with your problem. To speed things up, please note down your ticket number: #"
-            f"<b>{chat_id:06d}</b> so we have an easier time to find your request. We look "
-            f" forward to be hearing from you!"))
-
-        add_chat_message(chat_id, True,
-                         (
-                             "I am sorry for not being able to help you. Please feel free to tell us how you felt about my support "
-                             "so we are able to improve our services!"))
-
-        change_chat_status(chat_id, ChatStatusEnum.support_escalated)
+        escalate_support(chat_id)
         create_chat_resolved(chat_id, 0)
         change_chat_status(chat_id, ChatStatusEnum.pending_feedback)
 
