@@ -2,13 +2,13 @@ import logging
 import subprocess
 import time
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 import flask
 from flask import Flask, request, render_template, redirect
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
-from sqlalchemy import Engine
+from sqlalchemy import Engine, func
 
 import orm
 from common.get_logger import get_logger
@@ -214,6 +214,51 @@ def endpoint_chat_with_id(chat_id: int):
     handle_user_input(chat_id, user_input)
     return render_template('index.html', chat_history=get_chat_history(chat_id),
                            chat_status=get_chat_status(chat_id), id=chat_id)
+
+
+@app.route('/dashboard')
+def endpoint_dashboard():
+    total_chats = ChatHistory.query.count()
+    chats_support_escalated = ChatStatus.query.filter_by(status=ChatStatusEnum.support_escalated, active=True).count()
+    chats_pending_resolved = ChatStatus.query.filter_by(status=ChatStatusEnum.pending_resolved, active=True).count()
+    chats_pending_feedback = ChatStatus.query.filter_by(status=ChatStatusEnum.pending_feedback, active=True).count()
+
+    ended_chats = orm.db.session.query(ChatStatus).filter_by(status=ChatStatusEnum.ended, active=True).all()
+    chats_ended = len(ended_chats)
+
+    chats_resolved = ChatResolved.query.filter_by(resolved=1).count()
+    chats_unresolved = ChatResolved.query.filter_by(resolved=0).count()
+
+    avg_rating = orm.db.session.query(func.avg(ChatFeedback.stars)).scalar()
+
+    ended_chat_ids = [x.chat_id for x in ended_chats]
+    started_chats = (ChatStatus.query
+                     .filter_by(status=ChatStatusEnum.started)
+                     .filter(ChatStatus.chat_id.in_(ended_chat_ids))
+                     .all())
+
+    chat_started_times = {x.chat_id: x.time_reached for x in started_chats}
+    chat_ended_times = {x.chat_id: x.time_reached for x in ended_chats}
+    chat_durations = [v - chat_started_times[k] for k, v in chat_ended_times.items()]
+    average_chat_duration = round(0 if (len(chat_durations) == 0) else (sum(chat_durations) / len(chat_durations) / 1e9), 1)
+
+    kpis: List[Tuple[str, Any]] = [
+        ('Total Chats', total_chats),
+        ('Chats Support Escalated', f'{chats_support_escalated}{percent(chats_support_escalated, total_chats)}'),
+        ('Chats Pending Resolved',  f'{chats_pending_resolved}{percent(chats_pending_resolved, total_chats)}'),
+        ('Chats Pending Feedback',  f'{chats_pending_feedback}{percent(chats_pending_feedback, total_chats)}'),
+        ('Chats Ended',             f'{chats_ended}{percent(chats_ended, total_chats)}'),
+        ('Chats Resolved',          f'{chats_resolved}{percent(chats_ended, chats_resolved)}'),
+        ('Chats Unresolved',        f'{chats_unresolved}{percent(chats_ended, chats_unresolved)}'),
+        ('Avg. Chat Rating',        f'~{avg_rating} stars'),
+        ('Avg. Chat Duration',      f'~{average_chat_duration} seconds')
+    ]
+
+    return render_template('dashboard.html', kpis=kpis)
+
+
+def percent(part: int, total: int):
+    return '' if (total == 0 or part == 0) else f' ({round(part/total*100, 1)}%)'
 
 
 def classify_level(enquiry: str):
