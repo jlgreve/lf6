@@ -120,8 +120,9 @@ def endpoint_index() -> flask.Response:
     return redirect('/chat')
 
 
-@app.route('/submit_resolved/<int:chat_id>/<int:resolved>', methods=['POST'])
-def submit_resolved(chat_id: int, resolved: int):
+@app.route('/submit_resolved/<int:chat_id>', methods=['POST'])
+def submit_resolved(chat_id: int):
+    resolved = int(request.form["resolved"])
     if resolved is None or (resolved != 0 and resolved != 1):
         return redirect(f'/chat/{chat_id}')
 
