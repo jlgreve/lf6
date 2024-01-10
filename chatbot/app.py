@@ -250,8 +250,8 @@ def endpoint_dashboard():
         ('Chats Pending Resolved',  f'{chats_pending_resolved}{percent(chats_pending_resolved, total_chats)}'),
         ('Chats Pending Feedback',  f'{chats_pending_feedback}{percent(chats_pending_feedback, total_chats)}'),
         ('Chats Ended',             f'{chats_ended}{percent(chats_ended, total_chats)}'),
-        ('Chats Resolved',          f'{chats_resolved}{percent(chats_ended, chats_resolved)}'),
-        ('Chats Unresolved',        f'{chats_unresolved}{percent(chats_ended, chats_unresolved)}'),
+        ('Chats Resolved',          f'{chats_resolved}{percent(chats_resolved, chats_ended)}'),
+        ('Chats Unresolved',        f'{chats_unresolved}{percent(chats_unresolved, chats_ended)}'),
         ('Avg. Chat Rating',        f'~{avg_rating} stars'),
         ('Avg. Chat Duration',      f'~{average_chat_duration} seconds')
     ]
